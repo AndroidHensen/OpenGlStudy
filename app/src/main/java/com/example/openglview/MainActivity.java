@@ -1,13 +1,11 @@
 package com.example.openglview;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.openglview.render.TriangleRenderer;
+import com.example.openglview.utils.ShaderUtils;
 
 public class MainActivity extends AppCompatActivity {
     private GLSurfaceView mGLSurfaceView;
