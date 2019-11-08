@@ -20,14 +20,14 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
 
     public final float[] projectionMatrix = new float[16];
 
-    //顶点，按逆时针顺序排列
+    //顶点坐标
     private float[] vertex = {
             -1f, 1f, 0.0f,
             -1f, -1f, 0.0f,
             1f, -1f, 0.0f,
             1f, 1f, 0.0f
     };
-    //纹理坐标，（s,t），t坐标方向和顶点y坐标反着
+    //纹理坐标
     public float[] textureCoord = {
             0.0f, 0.0f,
             0.0f, 1.0f,
