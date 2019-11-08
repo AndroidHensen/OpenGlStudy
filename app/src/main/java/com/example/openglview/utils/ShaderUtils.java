@@ -48,7 +48,7 @@ public class ShaderUtils {
         }
 
         if (shader == 0) {
-            Log.e("ES20_ERROR", "Could not compile shader " + shaderType + ":" + GLES20.glGetShaderInfoLog(shader));
+            throw new RuntimeException("Could not compile shader " + shaderType + ":" + GLES20.glGetShaderInfoLog(shader));
         }
         return shader;
     }
@@ -65,13 +65,13 @@ public class ShaderUtils {
         //加载顶点着色器
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
         if (vertexShader == 0) {
-            return 0;
+            throw new RuntimeException("加载顶点着色器失败");
         }
 
         //加载片元着色器
         int pixelShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentSource);
         if (pixelShader == 0) {
-            return 0;
+            throw new RuntimeException("加载片元着色器失败");
         }
 
         //创建程序
@@ -98,9 +98,7 @@ public class ShaderUtils {
 
             //若链接失败则报错并删除程序
             if (linkStatus[0] != GLES20.GL_TRUE) {
-                Log.e("ES20_ERROR", "Could not link program: " + GLES20.glGetProgramInfoLog(program));
-                GLES20.glDeleteProgram(program);
-                program = 0;
+                throw new RuntimeException("Could not link program: " + GLES20.glGetProgramInfoLog(program));
             }
         }
         return program;
@@ -114,7 +112,7 @@ public class ShaderUtils {
     public static void checkGlError(String operation) {
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-            Log.e("ES20_ERROR", operation + ": glError " + error);
+            throw new RuntimeException(operation + ": glError " + error);
         }
     }
 
@@ -140,7 +138,7 @@ public class ShaderUtils {
             result = new String(buff, "UTF-8");
             result = result.replaceAll("\\r\\n", "\n");
         } catch (Exception e) {
-            Log.e("ShaderUtils", "printStackTrace", e);
+            throw new RuntimeException("printStackTrace", e);
         }
         return result;
     }

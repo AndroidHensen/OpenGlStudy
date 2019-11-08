@@ -30,9 +30,9 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
     //纹理坐标，（s,t），t坐标方向和顶点y坐标反着
     public float[] textureCoord = {
             0.0f, 0.0f,
-            0.0f, 0.5f,
-            0.5f, 0.5f,
-            0.5f, 0.0f
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f
     };
 
     private FloatBuffer vertexBuffer;
@@ -91,7 +91,6 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
         //绑定纹理
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, TextureUtils.loadTexture(R.drawable.texture));
-        //Set the sampler texture unit to 0
         GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "s_texture"), 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertex.length / 3);
