@@ -4,21 +4,19 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 import com.example.openglview.MainActivity;
+import com.example.openglview.utils.EGLUtils;
 import com.example.openglview.utils.ShaderUtils;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static android.opengl.Matrix.orthoM;
+
 public class TriangleRenderer implements GLSurfaceView.Renderer {
 
-    /**
-     * 每个Float多少字节
-     */
-    private final int mBytesPerFloat = 4;
+    public final float[] projectionMatrix = new float[16];
     /**
      * 顶点坐标数据
      */
@@ -31,7 +29,6 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
             -0.5f, -0.5f, 0.0f,
             0.5f, -0.5f, 0.0f
     };
-
     /**
      * 顶点颜色数据
      */
@@ -46,20 +43,9 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
     };
 
     {
-        mVertexBuffer = ByteBuffer.allocateDirect(vertices.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        mVertexBuffer
-                .put(vertices)
-                .position(0);
 
-        verticeColorsBuffer = ByteBuffer
-                .allocateDirect(verticeColors.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        verticeColorsBuffer
-                .put(verticeColors)
-                .position(0);
+        mVertexBuffer = EGLUtils.getFloatBuffer(vertices);
+        verticeColorsBuffer = EGLUtils.getFloatBuffer(verticeColors);
     }
 
     int program;
@@ -70,20 +56,33 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
         //创建程序
-        program = ShaderUtils.createProgram(MainActivity.vertex, MainActivity.fragment);
+        program = ShaderUtils.createProgram(MainActivity.triangleVertex, MainActivity.triangleFragment);
         //使用程序
         GLES20.glUseProgram(program);
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+        //设置视口
+        GLES20.glViewport(0, 0, width, height);
+        //计算正交投影矩阵，修正变形
+        float aspectRatio = width > height ?
+                (float) width / (float) height : (float) height / (float) width;
+        if (width > height) {
+            orthoM(projectionMatrix, 0, -aspectRatio, aspectRatio, -1f, 1f, -1f, 1f);
+        } else {
+            orthoM(projectionMatrix, 0, -1f, 1f, -aspectRatio, aspectRatio, -1f, 1f);
+        }
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         //擦除屏幕
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+
+        //传入正交矩阵修复变形
+        int matrixLoc = GLES20.glGetUniformLocation(program, "matrix");
+        GLES20.glUniformMatrix4fv(matrixLoc, 1, false, projectionMatrix, 0);
 
         //获取 vPosition 属性的位置
         int vposition = GLES20.glGetAttribLocation(program, "vPosition");
