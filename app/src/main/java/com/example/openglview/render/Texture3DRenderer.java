@@ -7,24 +7,41 @@ import android.opengl.Matrix;
 import com.example.openglview.MainActivity;
 import com.example.openglview.R;
 import com.example.openglview.utils.EGLUtils;
+import com.example.openglview.utils.MatrixUtils;
 import com.example.openglview.utils.ShaderUtils;
 import com.example.openglview.utils.TextureUtils;
 
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class Texture3DRenderer implements GLSurfaceView.Renderer {
 
-    public final float[] modelViewProjectionMatrix = new float[16];
+    private float[] mViewMatrix = new float[16];
+    private float[] mProjectMatrix = new float[16];
+    private float[] modelViewProjectionMatrix = new float[16];
 
-    //顶点坐标
+    //顶点坐标VBO
     private float[] vertex = {
-            -1f, 1f, 0.0f,
-            -1f, -1f, 0.0f,
-            1f, -1f, 0.0f,
-            1f, 1f, 0.0f
+            -1.0f, 1.0f, 1.0f,    //正面左上0
+            -1.0f, -1.0f, 1.0f,   //正面左下1
+            1.0f, -1.0f, 1.0f,    //正面右下2
+            1.0f, 1.0f, 1.0f,     //正面右上3
+            -1.0f, 1.0f, -1.0f,    //反面左上4
+            -1.0f, -1.0f, -1.0f,   //反面左下5
+            1.0f, -1.0f, -1.0f,    //反面右下6
+            1.0f, 1.0f, -1.0f,     //反面右上7
+    };
+    //顶点索引IBO
+    final short[] index = {
+            6, 7, 4, 6, 4, 5,    //后面
+            6, 3, 7, 6, 2, 3,    //右面
+            6, 5, 1, 6, 1, 2,    //下面
+            0, 3, 2, 0, 2, 1,    //正面
+            0, 1, 5, 0, 5, 4,    //左面
+            0, 7, 3, 0, 4, 7,    //上面
     };
     //纹理坐标
     public float[] textureCoord = {
@@ -34,10 +51,12 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
             1.0f, 0.0f
     };
 
+    private ShortBuffer indexBuffer;
     private FloatBuffer vertexBuffer;
     private FloatBuffer textureCoordBuffer;
 
     {
+        indexBuffer = EGLUtils.getShortBuffer(index);
         vertexBuffer = EGLUtils.getFloatBuffer(vertex);
         textureCoordBuffer = EGLUtils.getFloatBuffer(textureCoord);
     }
@@ -60,8 +79,14 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
         //设置视口
         GLES20.glViewport(0, 0, width, height);
 
-        Matrix.perspectiveM(modelViewProjectionMatrix, 0, 45, (float) width / height, 0.1f, 100f);
-        Matrix.translateM(modelViewProjectionMatrix, 0, 0f, 0f, -2.5f);
+        //计算宽高比
+        float ratio = (float) width / height;
+        //设置透视投影
+        Matrix.frustumM(mProjectMatrix, 0, -ratio, ratio, -1, 1, 3, 20);
+        //设置相机位置
+        Matrix.setLookAtM(mViewMatrix, 0, 5.0f, 5.0f, 10.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        //计算变换矩阵
+        Matrix.multiplyMM(modelViewProjectionMatrix, 0, mProjectMatrix, 0, mViewMatrix, 0);
     }
 
     @Override
