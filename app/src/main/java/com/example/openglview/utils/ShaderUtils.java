@@ -41,14 +41,14 @@ public class ShaderUtils {
 
             //若编译失败则显示错误日志并删除此shader
             if (compiled[0] == 0) {
-                Log.e("ES20_ERROR", "Could not compile shader " + shaderType + ":" + GLES20.glGetShaderInfoLog(shader));
+                Log.e("ES20_ERROR", "Could not compile shader " + source + ":" + GLES20.glGetShaderInfoLog(shader));
                 GLES20.glDeleteShader(shader);
                 shader = 0;
             }
         }
 
         if (shader == 0) {
-            throw new RuntimeException("Could not compile shader " + shaderType + ":" + GLES20.glGetShaderInfoLog(shader));
+            throw new RuntimeException("Could not compile shader " + source + ":" + GLES20.glGetShaderInfoLog(shader));
         }
         return shader;
     }
