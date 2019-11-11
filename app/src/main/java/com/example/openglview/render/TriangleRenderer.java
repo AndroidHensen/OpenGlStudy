@@ -84,19 +84,19 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         int matrixLoc = GLES20.glGetUniformLocation(program, "matrix");
         GLES20.glUniformMatrix4fv(matrixLoc, 1, false, projectionMatrix, 0);
 
-        //获取 vPosition 属性的位置
+        //顶点坐标和颜色值
         int vposition = GLES20.glGetAttribLocation(program, "vPosition");
-        //加载顶点数据到 vPosition 属性位置
-        GLES20.glVertexAttribPointer(vposition, 3, GLES20.GL_FLOAT, false, 0, mVertexBuffer);
-        GLES20.glEnableVertexAttribArray(vposition);
-
-        //获取 vColor 属性位置
         int aColor = GLES20.glGetAttribLocation(program, "aColor");
-        //加载顶点颜色数据到 vColor 属性位置
+        GLES20.glVertexAttribPointer(vposition, 3, GLES20.GL_FLOAT, false, 0, mVertexBuffer);
         GLES20.glVertexAttribPointer(aColor, 4, GLES20.GL_FLOAT, false, 0, verticeColorsBuffer);
+        GLES20.glEnableVertexAttribArray(vposition);
         GLES20.glEnableVertexAttribArray(aColor);
 
         //绘制
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
+
+        //销毁
+        GLES20.glDisableVertexAttribArray(vposition);
+        GLES20.glDisableVertexAttribArray(aColor);
     }
 }

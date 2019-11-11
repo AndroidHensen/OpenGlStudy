@@ -79,12 +79,11 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
         int matrixLoc = GLES20.glGetUniformLocation(program, "matrix");
         GLES20.glUniformMatrix4fv(matrixLoc, 1, false, projectionMatrix, 0);
 
+        //顶点坐标和纹理坐标
         int vertexLoc = GLES20.glGetAttribLocation(program, "a_Position");
         int textureLoc = GLES20.glGetAttribLocation(program, "a_texCoord");
-
         GLES20.glVertexAttribPointer(vertexLoc, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
         GLES20.glVertexAttribPointer(textureLoc, 2, GLES20.GL_FLOAT, false, 0, textureCoordBuffer);
-
         GLES20.glEnableVertexAttribArray(vertexLoc);
         GLES20.glEnableVertexAttribArray(textureLoc);
 
@@ -93,8 +92,10 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, TextureUtils.loadTexture(R.drawable.texture));
         GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "s_texture"), 0);
 
+        //绘制
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertex.length / 3);
 
+        //销毁
         GLES20.glDisableVertexAttribArray(vertexLoc);
         GLES20.glDisableVertexAttribArray(textureLoc);
     }
