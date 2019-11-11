@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         TextureUtils.init(this);
 
         // 设置渲染器
-        mGLSurfaceView.setRenderer(new TriangleRenderer());
+        mGLSurfaceView.setRenderer(new TextureRenderer());
         setContentView(mGLSurfaceView);
     }
 
