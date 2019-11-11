@@ -3,6 +3,8 @@ package com.example.openglview.render;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.SystemClock;
+import android.util.Log;
 
 import com.example.openglview.MainActivity;
 import com.example.openglview.R;
@@ -22,6 +24,8 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
     private float[] mViewMatrix = new float[16];
     private float[] mProjectMatrix = new float[16];
     private float[] modelViewProjectionMatrix = new float[16];
+
+    private float[] mRotationMatrix = new float[16];
 
     //顶点坐标VBO
     private float[] vertex = {
@@ -92,7 +96,14 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         //擦除屏幕
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
+        //旋转
+        long time = SystemClock.uptimeMillis() % 4000L;
+        float angle = 0.0005f * ((int) time);
+        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
+        Matrix.multiplyMM(modelViewProjectionMatrix, 0, modelViewProjectionMatrix, 0, mRotationMatrix, 0);
 
         //传入模型、视图、投影矩阵
         int matrixLoc = GLES20.glGetUniformLocation(program, "matrix");
@@ -112,7 +123,7 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
         GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "s_texture"), 0);
 
         //绘制
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertex.length / 3);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, index.length, GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 
         //销毁
         GLES20.glDisableVertexAttribArray(vertexLoc);
