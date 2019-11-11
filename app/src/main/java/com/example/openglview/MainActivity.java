@@ -4,8 +4,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.openglview.render.TextureRenderer;
-import com.example.openglview.render.TriangleRenderer;
+import com.example.openglview.render.Texture3DRenderer;
 import com.example.openglview.utils.ShaderUtils;
 import com.example.openglview.utils.TextureUtils;
 
@@ -17,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     public static String triangleFragment = "";
     public static String textureVertex = "";
     public static String textureFragment = "";
+    public static String texture3DVertex = "";
+    public static String texture3DFragment = "";
 
 
     @Override
@@ -29,12 +30,14 @@ public class MainActivity extends AppCompatActivity {
         triangleFragment = ShaderUtils.loadFromAssetsFile("triangleFragment.sh", getResources());
         textureVertex = ShaderUtils.loadFromAssetsFile("textureVertex.sh", getResources());
         textureFragment = ShaderUtils.loadFromAssetsFile("textureFragment.sh", getResources());
+        texture3DVertex = ShaderUtils.loadFromAssetsFile("texture3DVertex.sh", getResources());
+        texture3DFragment = ShaderUtils.loadFromAssetsFile("texture3DFragment.sh", getResources());
 
         // 工具类
         TextureUtils.init(this);
 
         // 设置渲染器
-        mGLSurfaceView.setRenderer(new TextureRenderer());
+        mGLSurfaceView.setRenderer(new Texture3DRenderer());
         setContentView(mGLSurfaceView);
     }
 
