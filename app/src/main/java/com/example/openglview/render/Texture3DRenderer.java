@@ -4,12 +4,10 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.example.openglview.MainActivity;
 import com.example.openglview.R;
 import com.example.openglview.utils.EGLUtils;
-import com.example.openglview.utils.MatrixUtils;
 import com.example.openglview.utils.ShaderUtils;
 import com.example.openglview.utils.TextureUtils;
 
