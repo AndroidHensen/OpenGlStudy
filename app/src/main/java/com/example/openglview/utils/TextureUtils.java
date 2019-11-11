@@ -25,11 +25,11 @@ public class TextureUtils {
 
         if (textureHandle[0] != 0) {
 
-            // Read in the resource
-            final Bitmap bitmap = getImageFromResources(context, resId);
-
-            // Bind to the texture in OpenGL
+            //加载图片纹理
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+            final Bitmap bitmap = getImageFromResources(context, resId);
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+            bitmap.recycle();
 
             //纹理过滤
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
@@ -37,11 +37,35 @@ public class TextureUtils {
             //纹理环绕方式
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-            // Load the bitmap into the bound texture.
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        }
 
-            // Recycle the bitmap, since its data has been loaded into OpenGL.
-            bitmap.recycle();
+        if (textureHandle[0] == 0) {
+            throw new RuntimeException("Error loading texture.");
+        }
+
+        return textureHandle[0];
+    }
+
+    public static int loadTextures(int[] resId) {
+        final int[] textureHandle = new int[1];
+
+        GLES20.glGenTextures(1, textureHandle, 0);
+
+        if (textureHandle[0] != 0) {
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, textureHandle[0]);
+            for (int i = 0; i < resId.length; i++) {
+                final Bitmap bitmap = getImageFromResources(context, resId[i]);
+                GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_X + i, 0, bitmap, 0);
+                bitmap.recycle();
+            }
+
+            //纹理过滤
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            //纹理环绕方式
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
         }
 
         if (textureHandle[0] == 0) {

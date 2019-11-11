@@ -25,6 +25,15 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
 
     private float[] mRotationMatrix = new float[16];
 
+    private int[] resIds = {
+            R.drawable.texture,
+            R.drawable.texture,
+            R.drawable.texture,
+            R.drawable.texture,
+            R.drawable.texture,
+            R.drawable.texture,
+    };
+
     //顶点坐标VBO
     private float[] vertex = {
             -1.0f, 1.0f, 1.0f,    //正面左上0
@@ -38,19 +47,31 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
     };
     //顶点索引IBO
     final short[] index = {
-            6, 7, 4, 6, 4, 5,    //后面
-            6, 3, 7, 6, 2, 3,    //右面
-            6, 5, 1, 6, 1, 2,    //下面
-            0, 3, 2, 0, 2, 1,    //正面
-            0, 1, 5, 0, 5, 4,    //左面
-            0, 7, 3, 0, 4, 7,    //上面
+            // Front
+            0,1,2,
+            0,2,3,
+            // Back
+            5,4,7,
+            5,7,6,
+            // Left
+            4,0,3,
+            4,3,7,
+            // Right
+            1,5,6,
+            1,6,2,
+            // Top
+            3,2,6,
+            3,6,7,
+            // Bottom
+            4,5,1,
+            4,1,0,
     };
     //纹理坐标
     public float[] textureCoord = {
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f
+            0.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+            1.0f, 0.0f, 1.0f
     };
 
     private ShortBuffer indexBuffer;
@@ -96,6 +117,7 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
         //擦除屏幕
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_TEXTURE_CUBE_MAP);
 
         //旋转
         long time = SystemClock.uptimeMillis() % 4000L;
@@ -111,13 +133,13 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
         int vertexLoc = GLES20.glGetAttribLocation(program, "a_Position");
         int textureLoc = GLES20.glGetAttribLocation(program, "a_texCoord");
         GLES20.glVertexAttribPointer(vertexLoc, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
-        GLES20.glVertexAttribPointer(textureLoc, 2, GLES20.GL_FLOAT, false, 0, textureCoordBuffer);
+        GLES20.glVertexAttribPointer(textureLoc, 3, GLES20.GL_FLOAT, false, 0, textureCoordBuffer);
         GLES20.glEnableVertexAttribArray(vertexLoc);
         GLES20.glEnableVertexAttribArray(textureLoc);
 
         //绑定纹理
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, TextureUtils.loadTexture(R.drawable.texture));
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, TextureUtils.loadTextures(resIds));
         GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "s_texture"), 0);
 
         //绘制
