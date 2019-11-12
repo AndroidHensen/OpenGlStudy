@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.example.openglview.MainActivity;
 import com.example.openglview.R;
@@ -120,8 +121,8 @@ public class Texture3DRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_TEXTURE_CUBE_MAP);
 
         //旋转
-        long time = SystemClock.uptimeMillis() % 4000L;
-        float angle = 0.0005f * ((int) time);
+        long time = SystemClock.uptimeMillis() % 1000L;
+        float angle = 0.00360f * ((int) time);
         Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
         Matrix.multiplyMM(modelViewProjectionMatrix, 0, modelViewProjectionMatrix, 0, mRotationMatrix, 0);
 
