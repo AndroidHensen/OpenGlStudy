@@ -56,7 +56,7 @@ public class TextureUtils {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, textureHandle[0]);
             for (int i = 0; i < resId.length; i++) {
                 final Bitmap bitmap = getImageFromResources(context, resId[i]);
-                GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_X + i, 0, bitmap, 0);
+                GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, bitmap, 0);
                 bitmap.recycle();
             }
 
