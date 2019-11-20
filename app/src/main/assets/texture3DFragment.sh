@@ -1,10 +1,9 @@
-#version 300 es
-precision mediump float;
+precision mediump float; 
 
-in vec3 v_texCoord;
-layout (location = 0) out vec4 outColor;
-uniform samplerCube s_texture;
-
-void main(){
-    outColor = texture(s_texture, v_texCoord);
+uniform samplerCube u_TextureUnit;
+varying vec3 v_Position;
+	    	   								
+void main()                    		
+{
+	gl_FragColor = textureCube(u_TextureUnit, v_Position);    
 }

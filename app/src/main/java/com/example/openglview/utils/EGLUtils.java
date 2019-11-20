@@ -31,4 +31,12 @@ public class EGLUtils {
                 .position(0);
         return buffer;
     }
+
+    public static ByteBuffer getByteBuffer(byte[] coords) {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(coords.length)
+                .order(ByteOrder.nativeOrder())
+                .put(coords);
+        buffer.position(0);
+        return buffer;
+    }
 }

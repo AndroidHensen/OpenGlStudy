@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class TextureUtils {
-
     private static Context context;
 
     public static void init(Context ctx) {
@@ -48,7 +47,6 @@ public class TextureUtils {
 
     public static int loadTextures(int[] resId) {
         final int[] textureHandle = new int[1];
-
         GLES20.glGenTextures(1, textureHandle, 0);
 
         if (textureHandle[0] != 0) {

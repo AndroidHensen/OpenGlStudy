@@ -1,13 +1,12 @@
-#version 300 es
+uniform mat4 u_Matrix;
+attribute vec3 a_Position;
+varying vec3 v_Position;
 
-layout (location = 0) in vec4 a_Position;
-layout (location = 1) in vec3 a_texCoord;
+void main()                    
+{                                	  	          
+    v_Position = a_Position;
+    v_Position.z = -v_Position.z;
 
-uniform mat4 matrix;
-out vec3 v_texCoord;
-
-void main()
-{
-    gl_Position = matrix * a_Position;
-    v_texCoord = a_texCoord;
-}
+    gl_Position = u_Matrix * vec4(a_Position, 1.0);
+    gl_Position = gl_Position.xyww;
+}    
