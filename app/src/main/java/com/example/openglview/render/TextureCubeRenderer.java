@@ -22,10 +22,11 @@ public class TextureCubeRenderer implements GLSurfaceView.Renderer {
     private float[] mProjectMatrix = new float[16];
     private float[] mMvpMatrix = new float[16];
 
+    //图片尺寸2048x2048的jpg才显示得出来
     private int[] resIds = new int[]{
-            R.drawable.right, R.drawable.left,
-            R.drawable.top, R.drawable.bottom,
-            R.drawable.front, R.drawable.back,
+            R.drawable.texture, R.drawable.texture,
+            R.drawable.texture, R.drawable.texture,
+            R.drawable.texture, R.drawable.texture,
     };
     private int resIdTexture;//纹理ID
 
@@ -109,7 +110,7 @@ public class TextureCubeRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         //擦除屏幕
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_TEST);
         //使用程序
         GLES20.glUseProgram(program);
 

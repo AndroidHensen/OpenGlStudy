@@ -9,6 +9,8 @@ import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.openglview.render.TextureCubeRenderer;
+import com.example.openglview.render.TextureRenderer;
 import com.example.openglview.render.TextureSkyBoxRenderer;
 import com.example.openglview.utils.ShaderUtils;
 import com.example.openglview.utils.TextureUtils;
@@ -17,7 +19,7 @@ import com.example.openglview.view.ClickableGLSurfaceView;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private ClickableGLSurfaceView mGLSurfaceView;
-    private TextureSkyBoxRenderer mRenderer;
+    private TextureRenderer mRenderer;
 
     public static String triangleVertex = "";
     public static String triangleFragment = "";
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TextureUtils.init(this);
 
         // 设置渲染器
-        mRenderer = new TextureSkyBoxRenderer();
+        mRenderer = new TextureRenderer();
         mGLSurfaceView.setRenderer(mRenderer);
         setContentView(mGLSurfaceView);
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             mGLSurfaceView.queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    mRenderer.setRotationMatrix(mRotationMatrix);
+//                    mRenderer.setRotationMatrix(mRotationMatrix);
                 }
             });
         }
