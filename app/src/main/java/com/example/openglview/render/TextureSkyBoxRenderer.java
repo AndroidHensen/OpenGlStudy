@@ -17,7 +17,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class Texture3DRenderer implements GLSurfaceView.Renderer {
+public class TextureSkyBoxRenderer implements GLSurfaceView.Renderer {
 
     private float[] mViewMatrix = new float[16];
     private float[] mProjectMatrix = new float[16];
