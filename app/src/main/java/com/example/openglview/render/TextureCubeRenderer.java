@@ -84,8 +84,8 @@ public class TextureCubeRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        //清理颜色
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        //设置背景清理颜色为白色
+        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         //创建程序
         program = ShaderUtils.createProgram(MainActivity.textureCubeVertex, MainActivity.textureCubeFragment);
         //创建纹理

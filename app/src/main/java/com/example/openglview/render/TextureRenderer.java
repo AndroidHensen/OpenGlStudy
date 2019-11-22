@@ -38,6 +38,8 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
     private FloatBuffer vertexBuffer;
     private FloatBuffer textureCoordBuffer;
 
+    private int resIdTexture;//纹理ID
+
     {
         vertexBuffer = EGLUtils.getFloatBuffer(vertex);
         textureCoordBuffer = EGLUtils.getFloatBuffer(textureCoord);
@@ -49,11 +51,10 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //设置背景清理颜色为白色
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-
         //创建程序
         program = ShaderUtils.createProgram(MainActivity.textureVertex, MainActivity.textureFragment);
-        //使用程序
-        GLES20.glUseProgram(program);
+        //创建纹理
+        resIdTexture = TextureUtils.loadTexture(R.drawable.texture);
     }
 
     @Override
@@ -75,6 +76,9 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
         //擦除屏幕
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
+        //使用程序
+        GLES20.glUseProgram(program);
+
         //传入正交矩阵修复变形
         int matrixLoc = GLES20.glGetUniformLocation(program, "matrix");
         GLES20.glUniformMatrix4fv(matrixLoc, 1, false, projectionMatrix, 0);
@@ -89,7 +93,7 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
 
         //绑定纹理
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, TextureUtils.loadTexture(R.drawable.texture));
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, resIdTexture);
         GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "s_texture"), 0);
 
         //绘制
@@ -98,5 +102,8 @@ public class TextureRenderer implements GLSurfaceView.Renderer {
         //销毁
         GLES20.glDisableVertexAttribArray(vertexLoc);
         GLES20.glDisableVertexAttribArray(textureLoc);
+
+        //移除程序
+        GLES20.glUseProgram(0);
     }
 }

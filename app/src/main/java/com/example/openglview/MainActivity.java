@@ -9,9 +9,7 @@ import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.openglview.render.TextureCubeRenderer;
 import com.example.openglview.render.TextureRenderer;
-import com.example.openglview.render.TextureSkyBoxRenderer;
 import com.example.openglview.utils.ShaderUtils;
 import com.example.openglview.utils.TextureUtils;
 import com.example.openglview.view.ClickableGLSurfaceView;

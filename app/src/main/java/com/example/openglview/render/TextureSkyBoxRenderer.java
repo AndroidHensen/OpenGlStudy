@@ -99,16 +99,6 @@ public class TextureSkyBoxRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         //设置视口
         GLES20.glViewport(0, 0, width, height);
-
-//        //计算宽高比
-//        float ratio = (float) width / height;
-//        //设置透视投影
-//        Matrix.frustumM(mProjectMatrix, 0, -ratio, ratio, -1, 1, 3, 20);
-//        //设置相机位置
-//        Matrix.setLookAtM(mViewMatrix, 0, 5.0f, 5.0f, 10.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-//        //计算变换矩阵
-//        Matrix.multiplyMM(mMvpMatrix, 0, mProjectMatrix, 0, mViewMatrix, 0);
-
         //计算宽高比
         float ratio = (float) width / (float) height;
         //设置相机位置
